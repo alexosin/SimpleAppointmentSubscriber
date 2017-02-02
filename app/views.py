@@ -1,7 +1,7 @@
 from app import app, engine
 from flask import render_template, redirect, request, session, flash, url_for
 from sqlalchemy.orm import sessionmaker
-from .models import User, Appointment, AppointmentDate, AppointmentTime
+from .models import User, Appointment, AppointmentDate, AppointmentTime, Subscription
 
 @app.route('/')
 @app.route('/index')
@@ -55,3 +55,28 @@ def appointment(id):
                             appointment=appointment,
                             dates=appointment_dates,
                             times=appointment_times)
+
+@app.route('/subscription', methods=['GET', 'POST'])
+def subscription():
+    if request.method == 'POST':
+        post_fullname = request.form['fullname']
+        post_email = request.form['email']
+        post_date = int(request.form['dates'])
+        post_time = int(request.form['times'])
+        post_appointment = int(request.form['appointment'])
+        Session = sessionmaker(bind=engine)
+        s = Session()
+        query = s.query(Subscription).filter_by(
+            fullname=post_fullname,
+            email=post_email,
+            appointment_id=post_appointment
+        ).first()
+        if query:
+            flash('You already have a subscription.')
+        else:
+            sub = Subscription(post_fullname, post_email, post_appointment, 
+                                post_date, post_time)
+            s.add(sub)
+            s.commit()
+            flash('Sucessfully subscribed.')
+        return redirect(url_for('main'))
