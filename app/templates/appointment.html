@@ -27,7 +27,7 @@
                     {% for time in times %}
                     <div class="radio">
                         <label>
-                            <input type='radio' name='times' value='{{ time.id }}'/>
+                            <input type='radio' name='times' value='{{ time.id }}' required>
                                 {{time.start.strftime('%H:%M')}} - {{time.end.strftime('%H:%M')}}
                         </label>
                     </div>
