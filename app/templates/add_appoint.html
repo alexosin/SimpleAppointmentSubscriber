@@ -1,0 +1,17 @@
+{% block body %}
+
+<form action="{{ url_for("add")}}" method="POST">
+    <input type="text" name="appoint_name" placeholder="name" maxlength="30" required />
+    {% for date_id in range(1, dates+1) %}
+        <input type="date" name="{{ date_id }}" min="2016-01-02" required />
+    {% endfor %}
+    {% for time_id in range(1, times+1) %}
+        <input type="time" name="{{ time_id }}_start" required />
+        <input type="time" name="{{ time_id }}_end" required />
+    {% endfor %}
+    <input type="hidden" name="dates_n" value="{{ dates }}">
+    <input type="hidden" name="times_n" value="{{ times }}">
+    <input type="submit" value="Create" />
+</form>
+
+{% endblock %}

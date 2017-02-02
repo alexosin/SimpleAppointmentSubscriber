@@ -1,0 +1,25 @@
+{% block body %}
+
+<a href="{{ url_for('main')}}"> Return </a>
+{{ appointment.name }}
+</br>
+<div>
+    <form action="{{ url_for("subscription")}}" method="POST">
+        {% for date in dates %}
+            <input type='radio' name='dates' value='{{ date.id }}' required>{{ date.date }}
+        {% endfor %}
+        </br>
+        {% for time in times %}
+            <input type='radio' name='times' value='{{ time.id }}'/>
+                {{time.start.strftime('%H:%M')}} - {{time.end.strftime('%H:%M')}}
+        {% endfor %}
+        </br>
+            <input type="text" name="fullname" placeholder="Full name" maxlength="50" required/>
+            <input type="email" name="email" placeholder="Email" required/>
+            <input type="hidden" name="appointment" value="{{ appointment.id }}">
+            <input type="submit" value="Submit"/>
+    </form>
+</div>
+
+
+{% endblock %}

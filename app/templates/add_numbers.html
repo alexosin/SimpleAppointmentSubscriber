@@ -1,0 +1,9 @@
+{% block body %}
+
+<form action="{{ url_for('add_numbers')}}" method="POST">
+    <input type="number" name="date" placeholder="date" min="1" max="10" required />
+    <input type="number" name="time" placeholder="time" min="1" max="10" required />
+    <input type="submit" value="Next" />
+</form>
+
+{% endblock %}

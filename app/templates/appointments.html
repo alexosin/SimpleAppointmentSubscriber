@@ -1,0 +1,25 @@
+{% block body %}
+
+    {% for appoint in appoints %}
+        <a href="{{ url_for("appointment", id=appoint.id)}}">{{ appoint.name }}</a>
+    {% endfor %}
+
+    {% if session['logged_in']%}
+        <a href="{{ url_for('add_numbers')}}"> Add new appoint </a>
+    {{ session['user'] }}
+        <a href="/logout"> Logout </a>
+    {% else %}
+        <a href="/login"> Login </a>
+    {% endif %}
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+
+{% endblock %}
