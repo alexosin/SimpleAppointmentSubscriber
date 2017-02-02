@@ -26,6 +26,7 @@ class Appointment(Base):
     name = Column(String)
     appointment_date = relationship('AppointmentDate', backref='appointments')
     appointment_time = relationship('AppointmentTime', backref='appointments')
+    subs = relationship('Subscription', backref='appointments')
 
     def __init__(self, name):
         self.name = name
@@ -39,6 +40,7 @@ class AppointmentDate(Base):
     id = Column(Integer, primary_key=True)
     date = Column(Date)
     appointment_id = Column(Integer, ForeignKey('appointments.id'))
+    subs = relationship('Subscription', backref='appointment_dates')
 
     def __init__(self, date, appointment_id):
         self.date = date
@@ -55,6 +57,7 @@ class AppointmentTime(Base):
     start = Column(Time)
     end = Column(Time)
     appointment_id = Column(Integer, ForeignKey('appointments.id'))
+    subs = relationship('Subscription', backref='appointment_times')
 
     def __init__(self, start, end, appointment_id):
         self.start = start
@@ -64,6 +67,27 @@ class AppointmentTime(Base):
     def __repr__(self):
         return '<AppointmentTime(id {}, start {}, end {}, appointment {})>' \
             .format(self.id, self.start, self.end, self.appointment_id)
+
+class Subscription(Base):
+    __tablename__ = "subscriptions"
+
+    id = Column(Integer, primary_key=True)
+    fullname = Column(String)
+    email = Column(String)
+    appointment_id = Column(Integer, ForeignKey('appointments.id'))
+    appointment_date = Column(Integer, ForeignKey('appointment_dates.id'))
+    appointment_time = Column(Integer, ForeignKey('appointment_times.id'))
+
+    def __init__(self, fullname, email, appointment_id, appointment_date, appointment_time):
+        self.fullname = fullname
+        self.email = email
+        self.appointment_id = appointment_id
+        self.appointment_date = appointment_date
+        self.appointment_time = appointment_time
+    
+    def __repr__(self):
+        return '<Subscription(id {}, fullname {}, email {}, appointment_id {})>' \
+            .format(self.id, self.fullname, self.email, self.appointment_id)
 
 if __name__=='__main__':
     engine = create_engine('sqlite:///app.db', echo=True)
