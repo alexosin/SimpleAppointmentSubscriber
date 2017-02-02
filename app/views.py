@@ -2,6 +2,7 @@ from app import app, engine
 from flask import render_template, redirect, request, session, flash, url_for
 from sqlalchemy.orm import sessionmaker
 from .models import User, Appointment, AppointmentDate, AppointmentTime, Subscription
+import datetime
 
 @app.route('/')
 @app.route('/index')
@@ -80,3 +81,56 @@ def subscription():
             s.commit()
             flash('Sucessfully subscribed.')
         return redirect(url_for('main'))
+
+@app.route('/addnumbers', methods=['GET', 'POST'])
+def add_numbers():
+    if request.method == 'POST':
+        dates_number = int(request.form['date'])
+        times_number = int(request.form['time'])
+        return render_template('add_appoint.html',
+                                dates=dates_number,
+                                times=times_number)
+    else:
+        if session.get('logged_in'):
+            return render_template('add_numbers.html')
+        else:
+            flash('You must to login first.')
+            return redirect(url_for('main'))
+
+@app.route('/addappoint', methods=['GET', 'POST'])
+def add():
+    if request.method == 'POST':
+        date_numbers = int(request.form['dates_n'])
+        time_numbers = int(request.form['times_n'])
+        appoint_name = request.form['appoint_name']
+        Session = sessionmaker(bind=engine)
+        s = Session()
+        appoint = Appointment(appoint_name)
+        s.add(appoint)
+        s.flush()
+        appoint_id = appoint.id
+        
+        dates = []
+        times = []
+        for i in range(1, date_numbers+1):
+            date = datetime.datetime.strptime(request.form[str(i)], "%Y-%m-%d")
+            d = AppointmentDate(date.date(), appoint_id)
+            dates.append(d)
+        for i in range(1, time_numbers+1):
+            start = datetime.datetime.strptime(request.form[str(i)+'_start'], "%H:%M")
+            end = datetime.datetime.strptime(request.form[str(i)+'_end'], "%H:%M")
+            start = start.time()
+            end = end.time()
+            time = AppointmentTime(start, end, appoint_id)
+            times.append(time)
+        s.add_all(dates)
+        s.add_all(times)
+        s.commit()
+        flash('Sucessfully added a new appointment.')
+        return redirect(url_for('main'))
+    else:
+        if session.get('logged_in'):
+            return render_template('add_appoint.html')
+        else:
+            flash('You must to login first.')
+            return redirect(url_for('main'))
