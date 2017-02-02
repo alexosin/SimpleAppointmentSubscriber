@@ -35,3 +35,9 @@ def login():
     else:
         return render_template('login.html')
 
+@app.route('/logout')
+def logout():
+    session['logged_in'] = False
+    flash('Signed out successfully.')
+    return redirect(url_for('main'))
+
