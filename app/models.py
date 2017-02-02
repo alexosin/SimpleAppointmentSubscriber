@@ -34,6 +34,12 @@ class Appointment(Base):
     def __repr__(self):
         return "<Appointment(id {}, name {})>".format(self.id, self.name)
 
+    def serialize(self):
+        return {
+        'id': self.id,
+        'name': self.name
+    }
+
 class AppointmentDate(Base):
     __tablename__ = "appointment_dates"
 
@@ -88,6 +94,16 @@ class Subscription(Base):
     def __repr__(self):
         return '<Subscription(id {}, fullname {}, email {}, appointment_id {})>' \
             .format(self.id, self.fullname, self.email, self.appointment_id)
+    
+    def serialize(self):
+        return {
+            'id': self.id,
+            'fullname': self.fullname,
+            'email': self.email,
+            'apointment_id': self.appointment_id,
+            'appointment_date': self.appointment_date,
+            'appointment_time': self.appointment_time
+        }
 
 if __name__=='__main__':
     engine = create_engine('sqlite:///app.db', echo=True)
