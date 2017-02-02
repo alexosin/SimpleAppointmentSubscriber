@@ -76,7 +76,7 @@ def subscription():
             appointment_id=post_appointment
         ).first()
         if query:
-            flash(u'You already have a subscription.', 'warning')
+            flash(u'You already have a subscription.', 'info')
         else:
             sub = Subscription(post_fullname, post_email, post_appointment, 
                                 post_date, post_time)
@@ -97,7 +97,7 @@ def add_numbers():
         if session.get('logged_in'):
             return render_template('add_numbers.html')
         else:
-            flash(u'You must to login first.', 'danger')
+            flash(u'You must to login first.', 'warning')
             return redirect(url_for('main'))
 
 @app.route('/addappoint', methods=['GET', 'POST'])
