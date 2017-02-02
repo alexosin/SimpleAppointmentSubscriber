@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Simple Subscriber</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')}}">  
+    </head>
+    <body>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('main')}}">Appointments</a></li>    
+                {% if session['logged_in'] %}
+                    <li><a href="{{ url_for('add_numbers')}}">Add appointment</a></li>
+                    <li class="heading active"><a>{{ session['user']}}</a></li>
+                    <li><a href="{{ url_for('logout')}}">Log out</a></li>
+                {% else %}   
+                    <li><a href="{{ url_for('login')}}">Log in</a></li>
+                {% endif %}
+            </ul>
+            </div>
+        </nav>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+        
+    </body>
+</html>

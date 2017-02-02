@@ -4,11 +4,11 @@ from sqlalchemy.orm import sessionmaker
 from .models import User, Appointment, AppointmentDate, AppointmentTime, Subscription
 import datetime
 
-@app.route('/')
 @app.route('/index')
 def index():
     return render_template('index.html')
 
+@app.route('/')
 @app.route('/appointments')
 def main():
     Session = sessionmaker(bind=engine)
@@ -31,15 +31,18 @@ def login():
             session['logged_in'] = True
             session['user'] = username
         else:
-            flash('Invalid login or password.')
+            flash(u'Invalid login or password.', 'danger')
         return redirect(url_for('main'))
     else:
+        if session.get('logged_in'):
+            flash(u'You have already logged in.', 'info')
+            return redirect(url_for('main'))
         return render_template('login.html')
 
 @app.route('/logout')
 def logout():
     session['logged_in'] = False
-    flash('Signed out successfully.')
+    flash(u'Signed out successfully.', 'success')
     return redirect(url_for('main'))
 
 @app.route('/appointment/<int:id>')
@@ -73,13 +76,13 @@ def subscription():
             appointment_id=post_appointment
         ).first()
         if query:
-            flash('You already have a subscription.')
+            flash(u'You already have a subscription.', 'warning')
         else:
             sub = Subscription(post_fullname, post_email, post_appointment, 
                                 post_date, post_time)
             s.add(sub)
             s.commit()
-            flash('Sucessfully subscribed.')
+            flash(u'Sucessfully subscribed.', 'success')
         return redirect(url_for('main'))
 
 @app.route('/addnumbers', methods=['GET', 'POST'])
@@ -94,7 +97,7 @@ def add_numbers():
         if session.get('logged_in'):
             return render_template('add_numbers.html')
         else:
-            flash('You must to login first.')
+            flash(u'You must to login first.', 'danger')
             return redirect(url_for('main'))
 
 @app.route('/addappoint', methods=['GET', 'POST'])
@@ -126,11 +129,11 @@ def add():
         s.add_all(dates)
         s.add_all(times)
         s.commit()
-        flash('Sucessfully added a new appointment.')
+        flash(u'Sucessfully added a new appointment.', 'success')
         return redirect(url_for('main'))
     else:
         if session.get('logged_in'):
             return render_template('add_appoint.html')
         else:
-            flash('You must to login first.')
+            flash(u'You must to login first.', 'warning')
             return redirect(url_for('main'))

@@ -1,25 +1,52 @@
-{% block body %}
+{% extends "index.html" %}
 
-<a href="{{ url_for('main')}}"> Return </a>
-{{ appointment.name }}
-</br>
-<div>
+{% block content %}
+
+<h1> {{ appointment.name }} </h1>
+<hr>
     <form action="{{ url_for("subscription")}}" method="POST">
-        {% for date in dates %}
-            <input type='radio' name='dates' value='{{ date.id }}' required>{{ date.date }}
-        {% endfor %}
-        </br>
-        {% for time in times %}
-            <input type='radio' name='times' value='{{ time.id }}'/>
-                {{time.start.strftime('%H:%M')}} - {{time.end.strftime('%H:%M')}}
-        {% endfor %}
-        </br>
-            <input type="text" name="fullname" placeholder="Full name" maxlength="50" required/>
-            <input type="email" name="email" placeholder="Email" required/>
-            <input type="hidden" name="appointment" value="{{ appointment.id }}">
-            <input type="submit" value="Submit"/>
+        <div class="row">
+            <div class="col-xs-3 col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Chooose date</div>
+                    <div class="panel-body">
+                    {% for date in dates %}
+                    <div class="radio">
+                        <label>
+                            <input type='radio' name='dates' value='{{ date.id }}' required>{{ date.date }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-3 col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Choose time</div>
+                    <div class="panel-body">
+                    {% for time in times %}
+                    <div class="radio">
+                        <label>
+                            <input type='radio' name='times' value='{{ time.id }}'/>
+                                {{time.start.strftime('%H:%M')}} - {{time.end.strftime('%H:%M')}}
+                        </label>
+                    </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-xs-6 col-md-8">
+                    <input type="text" class="form-control" name="fullname" placeholder="Full name" maxlength="50" required/>
+                    <br>
+                    <input type="email" class="form-control" name="email" placeholder="Email" required/>
+                    <input type="hidden" class="form-control" name="appointment" value="{{ appointment.id }}">
+                <br>
+                <button type="submit" class="btn btn-lg btn-default">Submit</button>
+            </div>
+        </div>
     </form>
-</div>
-
 
 {% endblock %}

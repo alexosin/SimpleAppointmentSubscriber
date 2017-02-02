@@ -1,25 +1,12 @@
-{% block body %}
+{% extends "index.html" %}
 
+{% block content %}
+    <ul class="list-group">
     {% for appoint in appoints %}
+        <li class="list-group-item">
         <a href="{{ url_for("appointment", id=appoint.id)}}">{{ appoint.name }}</a>
+        </li>
     {% endfor %}
-
-    {% if session['logged_in']%}
-        <a href="{{ url_for('add_numbers')}}"> Add new appoint </a>
-    {{ session['user'] }}
-        <a href="/logout"> Logout </a>
-    {% else %}
-        <a href="/login"> Login </a>
-    {% endif %}
-
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    {% endwith %}
+    </ul>
 
 {% endblock %}
