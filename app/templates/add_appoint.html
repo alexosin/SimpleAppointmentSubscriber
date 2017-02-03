@@ -4,35 +4,35 @@
 
 <form action="{{ url_for("add")}}" method="POST">
     <div class="row">
-    <div class="col-xs-6 col-md-6">
-    <p class="h4">Enter name of appointment</p>
-    <input type="text" class="form-control" name="appoint_name" placeholder="name" maxlength="30" required />
-    </div>
+        <div class="col-xs-6 col-md-6">
+            <p class="h4">Enter name of appointment</p>
+            <input type="text" class="form-control" name="appoint_name" placeholder="name" maxlength="30" required />
+        </div>
     </div>
     <hr>
     <div class="row">
-    <div class="col-xs-6 col-md-4">
-    <p class="h4">Enter date</p>
-    {% for date_id in range(1, dates+1) %}
-        <input type="date" class="form-control" name="{{ date_id }}" min="2016-01-02" required />
-        <br>
-    {% endfor %}
-    </div>
-    <div class="col-xs-6 col-md-4">
-    <p class="h4">Enter time</p>
-    {% for time_id in range(1, times+1) %}
-        <p>Start</p>
-        <input type="time" class="form-control mb-2 mr-sm-2 mb-sm-0" name="{{ time_id }}_start" required />
-        <p>End</p>
-        <input type="time" class="form-control mb-2 mr-sm-2 mb-sm-0" name="{{ time_id }}_end" required />
-        <br>
-    {% endfor %}
-    </div>
+        <div class="col-xs-6 col-md-4">
+            <p class="h4">Enter date</p>
+            {% for date_id in range(1, dates+1) %}
+            <input type="date" class="form-control" name="{{ date_id }}" min="2016-01-02" required />
+            <br>
+            {% endfor %}
+        </div>
+        <div class="col-xs-6 col-md-4">
+            <p class="h4">Enter time</p>
+            {% for time_id in range(1, times+1) %}
+            <p>Start</p>
+            <input type="time" class="form-control mb-2 mr-sm-2 mb-sm-0" name="{{ time_id }}_start" required />
+            <p>End</p>
+            <input type="time" class="form-control mb-2 mr-sm-2 mb-sm-0" name="{{ time_id }}_end" required />
+            <br>
+            {% endfor %}
+        </div>
     </div>
     <input type="hidden" name="dates_n" value="{{ dates }}">
     <input type="hidden" name="times_n" value="{{ times }}">
     <div class="col-xs-6 col-md-8">
-    <button type="submit" class="btn btn-md btn-block btn-default">Create</button>
+        <button type="submit" class="btn btn-md btn-block btn-default">Create</button>
     </div>
     <br>
 </form>
